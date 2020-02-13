@@ -9,3 +9,7 @@ terraform {
     region = "eu-west-1"
   }
 }
+
+resource "aws_default_vpc" "default" {
+}
+
