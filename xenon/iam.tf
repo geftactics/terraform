@@ -17,6 +17,11 @@ resource "aws_iam_role" "instance" {
 }
 EOF
 
+  tags = {
+    Name = var.instance_name
+    Terraform = true
+  }
+
 }
 
 
@@ -47,4 +52,27 @@ resource "aws_iam_role_policy" "instance" {
   ]
 }
 EOF
+}
+
+
+
+data "aws_iam_policy_document" "spotfleet" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["spotfleet.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "spotfleet" {
+  assume_role_policy = data.aws_iam_policy_document.spotfleet.json
+  name = "SpotFleet-Tagging-Role-For-${var.instance_name}"
+}
+
+resource "aws_iam_role_policy_attachment" "spotfleet" {
+  role = aws_iam_role.spotfleet.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2SpotFleetTaggingRole"
 }
