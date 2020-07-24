@@ -1,6 +1,6 @@
 variable "ami_name_pattern" {
   type    = list(string)
-  default = ["xenon-*"]
+  default = ["xenon*"]
 }
 
 variable "instance_name" {
@@ -13,4 +13,8 @@ variable "instance_types" {
   default = ["t3.micro", "t3a.micro", "t3.small", "t2.small", "t2.micro"]
 }
 
+variable "availability_zone" {
+  type    = string
+  default = "eu-west-1a"
+}
 

@@ -1,4 +1,5 @@
 resource "aws_spot_fleet_request" "instance" {
+  allocation_strategy                 = "diversified"
   iam_fleet_role                      = aws_iam_role.spotfleet.arn
   replace_unhealthy_instances         = true
   target_capacity                     = 1
@@ -9,6 +10,7 @@ resource "aws_spot_fleet_request" "instance" {
     for_each = var.instance_types
 
       content {
+        availability_zone           = var.availability_zone
         instance_type               = launch_specification.value
         ami                         = data.aws_ami.instance.id
         vpc_security_group_ids      = ["${aws_security_group.instance.id}"]
